@@ -21,7 +21,7 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         string memory _symbol,
         string memory _initBaseURI,
         string memory _initNotRevealedUri
-    ) ERC721(_name, _initBaseURI) {
+    ) ERC721(_name, _symbol) {
         setBaseURI(_initBaseURI);
         setNotRevealedURI(_initNotRevealedUri);
     }
