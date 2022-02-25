@@ -21,7 +21,10 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         string memory _symbol,
         string memory _initBaseURI,
         string memory _initNotRevealedUri
-    ) ERC721(_name, _initBaseURI) {}
+    ) ERC721(_name, _initBaseURI) {
+        setBaseURI(_initBaseURI);
+        setNotRevealedURI(_initNotRevealedUri);
+    }
 
     // override base ERC721 function
     function _baseURI() internal view virtual override returns (string memory) {
@@ -100,13 +103,13 @@ contract BoredDavid is ERC721Enumerable, Ownable {
     }
 
     function setNotRevealedURI(string memory _notRevealedURI)
-        external
+        public
         onlyOwner
     {
         notRevealedUri = _notRevealedURI;
     }
 
-    function setBaseURI(string memory _newBaseURI) external onlyOwner {
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
         baseURI = _newBaseURI;
     }
 
