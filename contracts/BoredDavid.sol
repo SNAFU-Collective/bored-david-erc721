@@ -60,6 +60,11 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         return tokenIds;
     }
 
+    // TODO: Look later
+    // function ownedToken(address _owner) external returns (uint256[]){
+    //     return _ownedTokens[_owner];
+    // }
+
     function tokenURI(uint256 tokenId)
         public
         view
@@ -102,10 +107,7 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         maxMintAmount = _newmaxMintAmount;
     }
 
-    function setNotRevealedURI(string memory _notRevealedURI)
-        public
-        onlyOwner
-    {
+    function setNotRevealedURI(string memory _notRevealedURI) public onlyOwner {
         notRevealedUri = _notRevealedURI;
     }
 
@@ -124,8 +126,8 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         paused = _state;
     }
 
-    function withdraw() external payable onlyOwner {
-        (bool os, ) = payable(owner()).call{value: address(this).balance}("");
-        require(os);
+    function withdraw() external onlyOwner {
+        address _owner = owner();
+        payable(_owner).transfer(address(this).balance);
     }
 }
