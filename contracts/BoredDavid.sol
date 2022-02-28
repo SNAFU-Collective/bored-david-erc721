@@ -15,6 +15,7 @@ contract BoredDavid is ERC721Enumerable, Ownable {
     bool public paused = false;
     bool public revealed = false;
     string public notRevealedUri;
+    mapping(address => bool) public whiteListedUser;
 
     constructor(
         string memory _name,
@@ -95,6 +96,14 @@ contract BoredDavid is ERC721Enumerable, Ownable {
     }
 
     // Only owner can access these
+    function addWhiteListUser(address _user) external onlyOwner {
+        whiteListedUser[_user] = true;
+    }
+
+    function removeWhiteListedUser(address _user) external onlyOwner {
+        whiteListedUser[_user] = false;
+    }
+
     function reveal() external onlyOwner {
         revealed = true;
     }
