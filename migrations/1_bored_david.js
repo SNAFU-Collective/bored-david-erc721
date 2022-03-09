@@ -6,7 +6,6 @@ module.exports = function (deployer) {
     BoredDavid,
     process.env.NAME,
     process.env.SYMBOL,
-    process.env.BASE_URL,
     process.env.NOT_REVEAL_URL,
   );
 };

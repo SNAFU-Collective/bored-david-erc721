@@ -3,34 +3,40 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
-contract BoredDavid is ERC721Enumerable, Ownable {
+contract BoredDavid is
+    ERC721Enumerable,
+    ERC721URIStorage,
+    ERC721Burnable,
+    Ownable
+{
     using Strings for uint256;
 
-    string baseURI;
-    string public baseExtension = ".json";
     uint256 public cost = 0.05 ether;
     uint256 public maxSupply = 1000;
     uint256 public maxMintAmount = 20;
     bool public paused = false;
-    bool public revealed = false;
     string public notRevealedUri;
+
     mapping(address => bool) public whiteListedUser;
 
     constructor(
         string memory _name,
         string memory _symbol,
-        string memory _initBaseURI,
         string memory _initNotRevealedUri
     ) ERC721(_name, _symbol) {
-        setBaseURI(_initBaseURI);
         setNotRevealedURI(_initNotRevealedUri);
     }
 
-    // override base ERC721 function
-    function _baseURI() internal view virtual override returns (string memory) {
-        return baseURI;
-    }
+    //TODO:    claimAirdrop
+
+    // This function will be used by the user to mint an nft for free. Only addresses in the airdrop list can mint and just once.
+
+    // We set default tokenUri (so we will need to unveil).
+
+    // use specific event.
 
     function mint(uint256 _mintAmount) external payable {
         uint256 supply = totalSupply();
@@ -45,8 +51,15 @@ contract BoredDavid is ERC721Enumerable, Ownable {
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _safeMint(msg.sender, supply + i);
+            _setTokenURI(supply + i, notRevealedUri);
         }
     }
+
+    // TODO: mintNFTsInBatch (only owner)
+
+    // No limit on amount and only owner can call.
+
+    // use specific event.
 
     function walletOfOwner(address _owner)
         external
@@ -61,52 +74,64 @@ contract BoredDavid is ERC721Enumerable, Ownable {
         return tokenIds;
     }
 
-    // TODO: Look later
-    // function ownedToken(address _owner) external returns (uint256[]){
-    //     return _ownedTokens[_owner];
-    // }
+    // The following functions are overrides required by Solidity.
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
+    }
 
     function tokenURI(uint256 tokenId)
         public
         view
-        virtual
-        override
+        override(ERC721, ERC721URIStorage)
         returns (string memory)
     {
-        require(
-            _exists(tokenId),
-            "ERC721Metadata: URI query for nonexistent token"
-        );
+        return super.tokenURI(tokenId);
+    }
 
-        if (revealed == false) {
-            return notRevealedUri;
-        }
-
-        string memory currentBaseURI = _baseURI();
-        return
-            bytes(currentBaseURI).length > 0
-                ? string(
-                    abi.encodePacked(
-                        currentBaseURI,
-                        tokenId.toString(),
-                        baseExtension
-                    )
-                )
-                : "";
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 
     // Only owner can access these
-    function addWhiteListUser(address _user) external onlyOwner {
-        whiteListedUser[_user] = true;
+    function addAddressesToAirdrop(address[] memory _users) external onlyOwner {
+        for (uint256 i = 0; i < _users.length; i++) {
+            whiteListedUser[_users[i]] = true;
+        }
     }
 
-    function removeWhiteListedUser(address _user) external onlyOwner {
-        whiteListedUser[_user] = false;
+    function removeAddressesToAirdrop(address[] memory _users)
+        external
+        onlyOwner
+    {
+        for (uint256 i = 0; i < _users.length; i++) {
+            whiteListedUser[_users[i]] = false;
+        }
     }
 
-    function reveal() external onlyOwner {
-        revealed = true;
-    }
+    //TODO: unveilNFTs
+
+    // One will accept a batch of nfts.
+
+    // Parameters: 2 arrays, one for token ids and one for token uris. You can update it more than once.
+
+    // We could do a mapping (unveiled -> true/false). If unveiled === true then you cannot update the tokenUri.
 
     function setCost(uint256 _newCost) external onlyOwner {
         cost = _newCost;
@@ -118,17 +143,6 @@ contract BoredDavid is ERC721Enumerable, Ownable {
 
     function setNotRevealedURI(string memory _notRevealedURI) public onlyOwner {
         notRevealedUri = _notRevealedURI;
-    }
-
-    function setBaseURI(string memory _newBaseURI) public onlyOwner {
-        baseURI = _newBaseURI;
-    }
-
-    function setBaseExtension(string memory _newBaseExtension)
-        external
-        onlyOwner
-    {
-        baseExtension = _newBaseExtension;
     }
 
     function pause(bool _state) external onlyOwner {
