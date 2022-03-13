@@ -12,6 +12,8 @@ contract BoredDavid is
     ERC721Burnable,
     Ownable
 {
+    event AirdropClaimed(address indexed user, uint256 indexed tokenId);
+
     using Strings for uint256;
 
     uint256 public cost = 0.05 ether;
@@ -30,13 +32,19 @@ contract BoredDavid is
         setNotRevealedURI(_initNotRevealedUri);
     }
 
-    //TODO:    claimAirdrop
-
-    // This function will be used by the user to mint an nft for free. Only addresses in the airdrop list can mint and just once.
-
-    // We set default tokenUri (so we will need to unveil).
-
-    // use specific event.
+    function claimAirdrop() external {
+        require(
+            whiteListedUser[msg.sender] == true,
+            "Only listed users can mint it once"
+        );
+        whiteListedUser[msg.sender] = false;
+        uint256 supply = totalSupply();
+        require(!paused);
+        require(supply + 1 <= maxSupply);
+        _safeMint(msg.sender, supply + 1);
+        _setTokenURI(supply + 1, notRevealedUri);
+        emit AirdropClaimed(msg.sender, supply + 1);
+    }
 
     function mint(uint256 _mintAmount) external payable {
         uint256 supply = totalSupply();
