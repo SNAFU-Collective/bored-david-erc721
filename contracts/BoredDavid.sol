@@ -133,13 +133,24 @@ contract BoredDavid is
         }
     }
 
-    //TODO: unveilNFTs
+    //unveilNFTs
 
     // One will accept a batch of nfts.
 
     // Parameters: 2 arrays, one for token ids and one for token uris. You can update it more than once.
 
     // We could do a mapping (unveiled -> true/false). If unveiled === true then you cannot update the tokenUri.
+
+    function unveilNFTs(uint256[] memory tokenIds, string[] memory uris) external onlyOwner {
+        require(tokenIds.length == uris.length, "Parameters Arrays should have the same length");
+        for(uint i = 0 ; i < tokenIds.length ; i++){
+            uint256 tokenId = tokenIds[i];
+            string memory uri = uris[i];
+            if(keccak256(abi.encodePacked(tokenURI(tokenId))) != keccak256(abi.encodePacked(notRevealedUri))){
+                _setTokenURI(tokenId, uri);
+            }
+        }   
+    }
 
     function setCost(uint256 _newCost) external onlyOwner {
         cost = _newCost;
