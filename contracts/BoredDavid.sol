@@ -6,6 +6,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
+
+//TODO: add error messages
+//TODO: test the batch amount
 contract BoredDavid is
     ERC721Enumerable,
     ERC721URIStorage,
@@ -13,44 +16,54 @@ contract BoredDavid is
     Ownable
 {
     event AirdropClaimed(address indexed user, uint256 indexed tokenId);
+    event OwnerMint(address indexed user, uint256 indexed tokenId);
+    event UserMint(address indexed user, uint256 indexed tokenId);
 
     using Strings for uint256;
 
-    uint256 public cost = 0.05 ether;
-    uint256 public maxSupply = 1000;
-    uint256 public maxMintAmount = 20;
+    uint256 public cost;
+    uint256 public maxSupply;
+    uint256 public maxMintAmount;
     bool public paused = false;
     string public notRevealedUri;
 
-    mapping(address => bool) public whiteListedUser;
+    mapping(address => bool) public eligibleForAirdrop;
 
     constructor(
         string memory _name,
         string memory _symbol,
-        string memory _initNotRevealedUri
+        string memory _initNotRevealedUri,
+        uint256 _cost,
+        uint256 _maxSupply,
+        uint256 _maxMintAmount
     ) ERC721(_name, _symbol) {
         setNotRevealedURI(_initNotRevealedUri);
+        cost = _cost;
+        maxSupply = _maxSupply;
+        maxMintAmount = _maxMintAmount;
     }
 
     function claimAirdrop() external {
         require(
-            whiteListedUser[msg.sender] == true,
+            eligibleForAirdrop[msg.sender] == true,
             "Only listed users can mint it once"
         );
-        whiteListedUser[msg.sender] = false;
+        eligibleForAirdrop[msg.sender] = false;
         uint256 supply = totalSupply();
         require(!paused);
-        require(supply + 1 <= maxSupply);
-        _safeMint(msg.sender, supply + 1);
-        _setTokenURI(supply + 1, notRevealedUri);
-        emit AirdropClaimed(msg.sender, supply + 1);
+        uint256 tokenId = supply + 1;
+        require(tokenId <= maxSupply);
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, notRevealedUri);
+        emit AirdropClaimed(msg.sender, tokenId);
     }
 
+    //TODO: Add another variable to enable minting
     function mint(uint256 _mintAmount) external payable {
         uint256 supply = totalSupply();
         require(!paused);
         require(_mintAmount > 0);
-        require(_mintAmount <= maxMintAmount);
+        require(msg.sender == owner() || _mintAmount <= maxMintAmount);
         require(supply + _mintAmount <= maxSupply);
 
         if (msg.sender != owner()) {
@@ -60,14 +73,13 @@ contract BoredDavid is
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _safeMint(msg.sender, supply + i);
             _setTokenURI(supply + i, notRevealedUri);
+            if (msg.sender != owner()) {
+                emit UserMint(msg.sender, supply + i);
+            }else{
+                emit OwnerMint(msg.sender, supply + i);
+            }
         }
     }
-
-    // TODO: mintNFTsInBatch (only owner)
-
-    // No limit on amount and only owner can call.
-
-    // use specific event.
 
     function walletOfOwner(address _owner)
         external
@@ -83,7 +95,6 @@ contract BoredDavid is
     }
 
     // The following functions are overrides required by Solidity.
-
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -120,7 +131,7 @@ contract BoredDavid is
     // Only owner can access these
     function addAddressesToAirdrop(address[] memory _users) external onlyOwner {
         for (uint256 i = 0; i < _users.length; i++) {
-            whiteListedUser[_users[i]] = true;
+            eligibleForAirdrop[_users[i]] = true;
         }
     }
 
@@ -129,7 +140,7 @@ contract BoredDavid is
         onlyOwner
     {
         for (uint256 i = 0; i < _users.length; i++) {
-            whiteListedUser[_users[i]] = false;
+            eligibleForAirdrop[_users[i]] = false;
         }
     }
 
@@ -141,15 +152,24 @@ contract BoredDavid is
 
     // We could do a mapping (unveiled -> true/false). If unveiled === true then you cannot update the tokenUri.
 
-    function unveilNFTs(uint256[] memory tokenIds, string[] memory uris) external onlyOwner {
-        require(tokenIds.length == uris.length, "Parameters Arrays should have the same length");
-        for(uint i = 0 ; i < tokenIds.length ; i++){
+    function unveilNFTs(uint256[] memory tokenIds, string[] memory uris)
+        external
+        onlyOwner
+    {
+        require(
+            tokenIds.length == uris.length,
+            "Parameters Arrays should have the same length"
+        );
+        for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 tokenId = tokenIds[i];
             string memory uri = uris[i];
-            if(keccak256(abi.encodePacked(tokenURI(tokenId))) != keccak256(abi.encodePacked(notRevealedUri))){
+            if (
+                keccak256(abi.encodePacked(tokenURI(tokenId))) ==
+                keccak256(abi.encodePacked(notRevealedUri))
+            ) {
                 _setTokenURI(tokenId, uri);
             }
-        }   
+        }
     }
 
     function setCost(uint256 _newCost) external onlyOwner {
