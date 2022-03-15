@@ -7,5 +7,8 @@ module.exports = function (deployer) {
     process.env.NAME,
     process.env.SYMBOL,
     process.env.NOT_REVEAL_URL,
+    1,
+    1000,
+    5
   );
 };
