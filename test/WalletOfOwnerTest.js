@@ -9,7 +9,7 @@ contract("Owner Wallet", (accounts) => {
     boredDavidInstance = await BoredDavid.deployed();
   });
 
-  it("Should return owner's token that he own", async () => {
+  it("User can index the nfts he owns", async () => {
     await boredDavidInstance.mint(5, {
       from: user1,
       value: 5,
@@ -18,7 +18,7 @@ contract("Owner Wallet", (accounts) => {
     assert.equal(tokens.length, 5);
   });
 
-  it("Should be failed without owner address parameter", async () => {
+  it("User address is needed to index nfts of a user", async () => {
     await boredDavidInstance.mint(5, {
       from: user1,
       value: 5,

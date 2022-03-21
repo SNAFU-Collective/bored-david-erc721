@@ -27,7 +27,7 @@ contract("Unveil NFT", (accounts) => {
     );
   });
 
-  it("Should work to unveil successfully", async () => {
+  it("Owner can unveil nfts successfully", async () => {
       await boredDavidInstance.mint(2, {
         from: owner,
       });

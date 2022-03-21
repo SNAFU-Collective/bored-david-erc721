@@ -17,7 +17,7 @@ contract("set cost for contract", (accounts) => {
     assert.equal(updatedCost.toNumber(), cost.toNumber() + 2);
   });
 
-  it("Should be failed if set cost try without owner", async () => {
+  it("Only owner can set nft price", async () => {
     await expectRevert(
       boredDavidInstance.setCost(2, {
         from: accounts[1],

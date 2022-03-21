@@ -9,7 +9,7 @@ contract("Withdraw balance", (accounts) => {
     boredDavidInstance = await BoredDavid.deployed();
   });
 
-  it("Should be callable only by owner", async () => {
+  it("Only owner should be able to withdraw", async () => {
     await expectRevert(
       boredDavidInstance.withdraw({
         from: user1,
@@ -18,7 +18,7 @@ contract("Withdraw balance", (accounts) => {
     );
   });
 
-  it("Should be able withdraw balance successfully", async () => {
+  it("Owner should be able to withdraw balance successfully", async () => {
     const ownerBalance = await balance.current(owner);
     await boredDavidInstance.mint(5, {
       from: user1,

@@ -9,7 +9,7 @@ contract("Mint NFTs", (accounts) => {
         boredDavidInstance = await BoredDavid.deployed();
     })
 
-    it("Should be failed because of less mint amout", async () => {
+    it("Mint amount must be more than 0", async () => {
         await expectRevert(
           boredDavidInstance.mint(0, {
             from: user1,
@@ -18,7 +18,7 @@ contract("Mint NFTs", (accounts) => {
         );
     })
 
-    it("Should be failed because of more than max mint amout", async () => {
+    it("Mint amount must be less than or equal to maxMintAmount", async () => {
       await expectRevert(
         boredDavidInstance.mint(10, {
           from: user1,
@@ -27,9 +27,10 @@ contract("Mint NFTs", (accounts) => {
       );
     });
 
-    // TODO: max supply test case
+    // TODO: max supply test case, maybe we could deploy sc with 1 total supply and try to mint 2 nfts or if this is not
+    // doable we could just test it manually in ropsten
 
-    it("Should be failed due to less amount of eth", async () => {
+    it("Need to pay appropriate amount of eth to mint", async () => {
       await expectRevert(
         boredDavidInstance.mint(5, {
           from: user1,
@@ -38,7 +39,7 @@ contract("Mint NFTs", (accounts) => {
       );
     });
 
-    it("Should be failed due to less amount of eth", async () => {
+    it("User can mint nft correctly", async () => {
       const response = await boredDavidInstance.mint(5, {
           from: user1,
           value: 5,
@@ -48,7 +49,7 @@ contract("Mint NFTs", (accounts) => {
         assert.equal(response.logs[1].event, "UserMint");
     });
 
-    it("Should be minted without eth if user is owner", async () => {
+    it("Owner do not need to pay in order to mint", async () => {
       const response = await boredDavidInstance.mint(5, {
         from: owner,
       });

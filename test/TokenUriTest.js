@@ -18,7 +18,7 @@ contract("Token URI test", (accounts) => {
     assert.equal(tokenURI, "https://example.com");
   });
 
-  it("Should return uri of specific token", async () => {
+  it("Invalid number of parameters for \"tokenURI\"", async () => {
     await boredDavidInstance.mint(1, {
       from: user1,
       value: 5,

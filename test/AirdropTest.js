@@ -10,7 +10,7 @@ contract("Add, remove, claim Airdrop", (accounts) => {
   });
 
    // add airdrop
-  it("Should be failed to add airdrop list due to onlyOwner access", async () => {
+  it("Only owner can add addresses to airdrop", async () => {
     await expectRevert(
       boredDavidInstance.addAddressesToAirdrop([user1], {
         from: user2,
@@ -19,12 +19,12 @@ contract("Add, remove, claim Airdrop", (accounts) => {
     );
   });
 
-  it("Should add users to airdrop list", async () => {
+  it("Owner can correctly add addresses to airdrop", async () => {
      const response = await boredDavidInstance.addAddressesToAirdrop([user1, user2])
       assert.equal(response.receipt.status, true);
   });
 
-  it("Should be failed without array argument", async () => {
+  it("Should fail without array argument", async () => {
     await expectRevert(
       boredDavidInstance.addAddressesToAirdrop(),
       'Invalid number of parameters for "addAddressesToAirdrop"'
@@ -32,7 +32,7 @@ contract("Add, remove, claim Airdrop", (accounts) => {
   });
 
   // remove from airdrop list
-  it("Should be failed to remove airdrop list due to onlyOwner access", async () => {
+  it("Only owner should be able to remove addresses from airdrop list", async () => {
     await expectRevert(
       boredDavidInstance.removeAddressesToAirdrop([user1], {
         from: user2,
@@ -41,7 +41,7 @@ contract("Add, remove, claim Airdrop", (accounts) => {
     );
   });
 
-   it("Should remove users to airdrop list", async () => {
+   it("Owner can successfully remove addresses from airdrop list", async () => {
      const response = await boredDavidInstance.addAddressesToAirdrop([
        user1,
        user2,
@@ -50,7 +50,7 @@ contract("Add, remove, claim Airdrop", (accounts) => {
    });
 
   // claim airdrop
-  it("Should success to claim airdrop", async () => {
+  it("Whitelisted user can successfully claim airdrop", async () => {
     await boredDavidInstance.addAddressesToAirdrop([user1, user2], {
       from: owner,
     });
@@ -60,7 +60,7 @@ contract("Add, remove, claim Airdrop", (accounts) => {
     assert.equal(response.logs[1].event, "AirdropClaimed");
   });
 
-  it("Should fail to claim airdrop", async () => {
+  it("Only whitelisted users can claim airdrop", async () => {
     await expectRevert(
       boredDavidInstance.claimAirdrop({
         from: user1,
