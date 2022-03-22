@@ -26,6 +26,7 @@ contract BoredDavid is
     uint256 public maxMintAmount;
     bool public paused = false;
     string public notRevealedUri;
+    uint256 public startingTokenId;
 
     mapping(address => bool) public eligibleForAirdrop;
 
@@ -35,12 +36,14 @@ contract BoredDavid is
         string memory _initNotRevealedUri,
         uint256 _cost,
         uint256 _maxSupply,
-        uint256 _maxMintAmount
+        uint256 _maxMintAmount,
+        uint256 _startingTokenId
     ) ERC721(_name, _symbol) {
         setNotRevealedURI(_initNotRevealedUri);
         cost = _cost;
         maxSupply = _maxSupply;
         maxMintAmount = _maxMintAmount;
+        startingTokenId = _startingTokenId;
     }
 
     function claimAirdrop() external {
@@ -51,8 +54,9 @@ contract BoredDavid is
         eligibleForAirdrop[msg.sender] = false;
         uint256 supply = totalSupply();
         require(!paused);
-        uint256 tokenId = supply + 1;
-        require(tokenId <= maxSupply);
+        require(supply + 1 <= maxSupply);
+
+        uint256 tokenId = startingTokenId + supply + 1;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, notRevealedUri);
         emit AirdropClaimed(msg.sender, tokenId);
@@ -70,13 +74,15 @@ contract BoredDavid is
             require(msg.value >= cost * _mintAmount);
         }
 
+        uint256 newTokenId = startingTokenId + supply;
+
         for (uint256 i = 1; i <= _mintAmount; i++) {
-            _safeMint(msg.sender, supply + i);
-            _setTokenURI(supply + i, notRevealedUri);
+            _safeMint(msg.sender, newTokenId + i);
+            _setTokenURI(newTokenId + i, notRevealedUri);
             if (msg.sender != owner()) {
-                emit UserMint(msg.sender, supply + i);
-            }else{
-                emit OwnerMint(msg.sender, supply + i);
+                emit UserMint(msg.sender, newTokenId + i);
+            } else {
+                emit OwnerMint(msg.sender, newTokenId + i);
             }
         }
     }
