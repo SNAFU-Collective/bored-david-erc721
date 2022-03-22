@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
-
 //TODO: add error messages
 //TODO: test the batch amount
 contract BoredDavid is
@@ -15,18 +14,22 @@ contract BoredDavid is
     ERC721Burnable,
     Ownable
 {
-    event AirdropClaimed(address indexed user, uint256 indexed tokenId);
-    event OwnerMint(address indexed user, uint256 indexed tokenId);
-    event UserMint(address indexed user, uint256 indexed tokenId);
+    event AirdropClaimed(address indexed user, uint256 indexed tokenId, uint256 rarity);
+    event OwnerMint(address indexed user, uint256 indexed tokenId, uint256 rarity);
+    event UserMint(address indexed user, uint256 indexed tokenId, uint256 rarity);
 
     using Strings for uint256;
 
-    uint256 public cost;
+    uint256 public rareCost;
+    uint256 public commonCost;
     uint256 public maxSupply;
     uint256 public maxMintAmount;
     bool public paused = false;
     string public notRevealedUri;
     uint256 public startingTokenId;
+    //TODO: add setters
+    bool public commonSaleEnabled;
+    bool public rareSaleEnabled;
 
     mapping(address => bool) public eligibleForAirdrop;
 
@@ -34,13 +37,15 @@ contract BoredDavid is
         string memory _name,
         string memory _symbol,
         string memory _initNotRevealedUri,
-        uint256 _cost,
+        uint256 _rareCost,
+        uint256 _commonCost,
         uint256 _maxSupply,
         uint256 _maxMintAmount,
         uint256 _startingTokenId
     ) ERC721(_name, _symbol) {
         setNotRevealedURI(_initNotRevealedUri);
-        cost = _cost;
+        rareCost = _rareCost;
+        commonCost = _commonCost;
         maxSupply = _maxSupply;
         maxMintAmount = _maxMintAmount;
         startingTokenId = _startingTokenId;
@@ -59,20 +64,15 @@ contract BoredDavid is
         uint256 tokenId = startingTokenId + supply + 1;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, notRevealedUri);
-        emit AirdropClaimed(msg.sender, tokenId);
+        emit AirdropClaimed(msg.sender, tokenId, 0);
     }
 
-    //TODO: Add another variable to enable minting
-    function mint(uint256 _mintAmount) external payable {
+    function _mintToken(uint256 _mintAmount, uint8 rarity) internal {
         uint256 supply = totalSupply();
         require(!paused);
         require(_mintAmount > 0);
         require(msg.sender == owner() || _mintAmount <= maxMintAmount);
         require(supply + _mintAmount <= maxSupply);
-
-        if (msg.sender != owner()) {
-            require(msg.value >= cost * _mintAmount);
-        }
 
         uint256 newTokenId = startingTokenId + supply;
 
@@ -80,11 +80,27 @@ contract BoredDavid is
             _safeMint(msg.sender, newTokenId + i);
             _setTokenURI(newTokenId + i, notRevealedUri);
             if (msg.sender != owner()) {
-                emit UserMint(msg.sender, newTokenId + i);
+                emit UserMint(msg.sender, newTokenId + i, rarity);
             } else {
-                emit OwnerMint(msg.sender, newTokenId + i);
+                emit OwnerMint(msg.sender, newTokenId + i, rarity);
             }
         }
+    }
+
+    //TODO: Add another variable to enable minting
+    function mintCommon (uint256 _mintAmount) external payable{
+        if (msg.sender != owner()) {
+            require(msg.value >= commonCost * _mintAmount);
+        }
+        _mintToken(_mintAmount, 0);
+    }
+
+    //TODO: Add another variable to enable minting
+    function mintRare (uint256 _mintAmount) external payable{
+        if (msg.sender != owner()) {
+            require(msg.value >= rareCost * _mintAmount);
+        }
+        _mintToken(_mintAmount, 1);
     }
 
     function walletOfOwner(address _owner)
@@ -178,8 +194,12 @@ contract BoredDavid is
         }
     }
 
-    function setCost(uint256 _newCost) external onlyOwner {
-        cost = _newCost;
+    function setRareCost(uint256 _newCost) external onlyOwner {
+        rareCost = _newCost;
+    }
+    
+    function setCommonCost(uint256 _newCost) external onlyOwner {
+        commonCost = _newCost;
     }
 
     function setmaxMintAmount(uint256 _newmaxMintAmount) external onlyOwner {
