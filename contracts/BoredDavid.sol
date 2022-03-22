@@ -81,10 +81,10 @@ contract BoredDavid is
 
     function _mintToken(uint256 _mintAmount, uint8 rarity) internal {
         uint256 supply = totalSupply();
-        require(!paused);
-        require(_mintAmount > 0);
-        require(msg.sender == owner() || _mintAmount <= maxMintAmount);
-        require(supply + _mintAmount <= maxSupply);
+        require(!paused, "Contract must be unpaused");
+        require(_mintAmount > 0, "Mint amount must be more than 0");
+        require(msg.sender == owner() || _mintAmount <= maxMintAmount, "Mint amount must be less than or equal to maxMintAmount");
+        require(supply + _mintAmount <= maxSupply, "Mint amount must be less than or equal to maxSupply");
 
         uint256 newTokenId = startingTokenId + supply;
 
