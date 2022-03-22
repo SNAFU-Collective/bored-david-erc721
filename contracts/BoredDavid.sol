@@ -14,9 +14,21 @@ contract BoredDavid is
     ERC721Burnable,
     Ownable
 {
-    event AirdropClaimed(address indexed user, uint256 indexed tokenId, uint256 rarity);
-    event OwnerMint(address indexed user, uint256 indexed tokenId, uint256 rarity);
-    event UserMint(address indexed user, uint256 indexed tokenId, uint256 rarity);
+    event AirdropClaimed(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
+    event OwnerMint(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
+    event UserMint(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
 
     using Strings for uint256;
 
@@ -27,7 +39,7 @@ contract BoredDavid is
     bool public paused = false;
     string public notRevealedUri;
     uint256 public startingTokenId;
-    //TODO: add setters
+
     bool public commonSaleEnabled;
     bool public rareSaleEnabled;
 
@@ -87,16 +99,16 @@ contract BoredDavid is
         }
     }
 
-    //TODO: Add another variable to enable minting
-    function mintCommon (uint256 _mintAmount) external payable{
+    function mintCommon(uint256 _mintAmount) external payable {
+        require(commonSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
             require(msg.value >= commonCost * _mintAmount);
         }
         _mintToken(_mintAmount, 0);
     }
 
-    //TODO: Add another variable to enable minting
-    function mintRare (uint256 _mintAmount) external payable{
+    function mintRare(uint256 _mintAmount) external payable {
+        require(rareSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
             require(msg.value >= rareCost * _mintAmount);
         }
@@ -197,7 +209,7 @@ contract BoredDavid is
     function setRareCost(uint256 _newCost) external onlyOwner {
         rareCost = _newCost;
     }
-    
+
     function setCommonCost(uint256 _newCost) external onlyOwner {
         commonCost = _newCost;
     }
@@ -212,6 +224,14 @@ contract BoredDavid is
 
     function pause(bool _state) external onlyOwner {
         paused = _state;
+    }
+
+    function enableCommonSale(bool _state) external onlyOwner {
+        commonSaleEnabled = _state;
+    }
+
+    function enableRareSale(bool _state) external onlyOwner {
+        rareSaleEnabled = _state;
     }
 
     function withdraw() external onlyOwner {
