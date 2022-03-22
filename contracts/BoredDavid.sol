@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
-
 //TODO: add error messages
 //TODO: test the batch amount
 contract BoredDavid is
@@ -61,13 +60,16 @@ contract BoredDavid is
     //TODO: Add another variable to enable minting
     function mint(uint256 _mintAmount) external payable {
         uint256 supply = totalSupply();
-        require(!paused);
-        require(_mintAmount > 0);
-        require(msg.sender == owner() || _mintAmount <= maxMintAmount);
-        require(supply + _mintAmount <= maxSupply);
+        require(!paused, "Contract must be unpaused");
+        require(_mintAmount > 0, "Mint amount must be more than 0");
+        require(msg.sender == owner() || _mintAmount <= maxMintAmount, "Mint amount must be less than or equal to maxMintAmount");
+        require(supply + _mintAmount <= maxSupply, "Mint amount must be less than or equal to maxSupply");
 
         if (msg.sender != owner()) {
-            require(msg.value >= cost * _mintAmount);
+            require(
+                msg.value >= cost * _mintAmount,
+                "Need appropriate amount of eth"
+            );
         }
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
@@ -75,7 +77,7 @@ contract BoredDavid is
             _setTokenURI(supply + i, notRevealedUri);
             if (msg.sender != owner()) {
                 emit UserMint(msg.sender, supply + i);
-            }else{
+            } else {
                 emit OwnerMint(msg.sender, supply + i);
             }
         }

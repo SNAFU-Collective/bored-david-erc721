@@ -7,5 +7,8 @@ module.exports = function (deployer) {
     process.env.NAME,
     process.env.SYMBOL,
     process.env.NOT_REVEAL_URL,
+    process.env.COST,
+    process.env.MAX_SUPPLY,
+    process.env.MAX_MINT_AMOUNT
   );
 };
