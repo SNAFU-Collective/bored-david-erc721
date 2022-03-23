@@ -102,7 +102,7 @@ contract BoredDavid is
     function mintCommon(uint256 _mintAmount) external payable {
         require(commonSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
-            require(msg.value >= commonCost * _mintAmount);
+            require(msg.value >= commonCost * _mintAmount, "Need appropriate amount of eth");
         }
         _mintToken(_mintAmount, 0);
     }
@@ -110,7 +110,7 @@ contract BoredDavid is
     function mintRare(uint256 _mintAmount) external payable {
         require(rareSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
-            require(msg.value >= rareCost * _mintAmount);
+            require(msg.value >= rareCost * _mintAmount, "Need appropriate amount of eth");
         }
         _mintToken(_mintAmount, 1);
     }

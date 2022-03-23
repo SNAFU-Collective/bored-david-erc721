@@ -7,6 +7,7 @@ contract("Unveil NFT", (accounts) => {
   let boredDavidInstance = null;
   before(async () => {
     boredDavidInstance = await BoredDavid.deployed();
+    await boredDavidInstance.enableCommonSale(true);
   });
 
   it("Should be callable only by owner", async () => {
@@ -28,19 +29,19 @@ contract("Unveil NFT", (accounts) => {
   });
 
   it("Owner can unveil nfts successfully", async () => {
-      await boredDavidInstance.mint(2, {
+      await boredDavidInstance.mintCommon(2, {
         from: owner,
       });
 
     await boredDavidInstance.unveilNFTs(
-      [1, 2],
+      [2, 3],
       ["http://updateuri.com", "http://updateuri2.com"],
       {
         from: owner,
       }
     );
 
-    const tokenURI = await boredDavidInstance.tokenURI(1);
+    const tokenURI = await boredDavidInstance.tokenURI(2);
     assert.equal(tokenURI, "http://updateuri.com");
 
   });

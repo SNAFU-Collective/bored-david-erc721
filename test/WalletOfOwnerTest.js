@@ -7,10 +7,11 @@ contract("Owner Wallet", (accounts) => {
   let boredDavidInstance = null;
   before(async () => {
     boredDavidInstance = await BoredDavid.deployed();
+    await boredDavidInstance.enableCommonSale(true);
   });
 
   it("User can index the nfts he owns", async () => {
-    await boredDavidInstance.mint(5, {
+    await boredDavidInstance.mintCommon(5, {
       from: user1,
       value: 5,
     });
@@ -19,7 +20,7 @@ contract("Owner Wallet", (accounts) => {
   });
 
   it("User address is needed to index nfts of a user", async () => {
-    await boredDavidInstance.mint(5, {
+    await boredDavidInstance.mintCommon(5, {
       from: user1,
       value: 5,
     });
