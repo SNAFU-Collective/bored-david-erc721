@@ -7,6 +7,7 @@ contract("Withdraw balance", (accounts) => {
   let boredDavidInstance = null;
   before(async () => {
     boredDavidInstance = await BoredDavid.deployed();
+    await boredDavidInstance.enableCommonSale(true);
   });
 
   it("Only owner should be able to withdraw", async () => {
@@ -20,7 +21,7 @@ contract("Withdraw balance", (accounts) => {
 
   it("Owner should be able to withdraw balance successfully", async () => {
     const ownerBalance = await balance.current(owner);
-    await boredDavidInstance.mint(5, {
+    await boredDavidInstance.mintCommon(5, {
       from: user1,
       value: 5,
     });

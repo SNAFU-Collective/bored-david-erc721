@@ -14,17 +14,34 @@ contract BoredDavid is
     ERC721Burnable,
     Ownable
 {
-    event AirdropClaimed(address indexed user, uint256 indexed tokenId);
-    event OwnerMint(address indexed user, uint256 indexed tokenId);
-    event UserMint(address indexed user, uint256 indexed tokenId);
+    event AirdropClaimed(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
+    event OwnerMint(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
+    event UserMint(
+        address indexed user,
+        uint256 indexed tokenId,
+        uint256 rarity
+    );
 
     using Strings for uint256;
 
-    uint256 public cost;
+    uint256 public rareCost;
+    uint256 public commonCost;
     uint256 public maxSupply;
     uint256 public maxMintAmount;
     bool public paused = false;
     string public notRevealedUri;
+    uint256 public startingTokenId;
+
+    bool public commonSaleEnabled;
+    bool public rareSaleEnabled;
 
     mapping(address => bool) public eligibleForAirdrop;
 
@@ -32,14 +49,18 @@ contract BoredDavid is
         string memory _name,
         string memory _symbol,
         string memory _initNotRevealedUri,
-        uint256 _cost,
+        uint256 _rareCost,
+        uint256 _commonCost,
         uint256 _maxSupply,
-        uint256 _maxMintAmount
+        uint256 _maxMintAmount,
+        uint256 _startingTokenId
     ) ERC721(_name, _symbol) {
         setNotRevealedURI(_initNotRevealedUri);
-        cost = _cost;
+        rareCost = _rareCost;
+        commonCost = _commonCost;
         maxSupply = _maxSupply;
         maxMintAmount = _maxMintAmount;
+        startingTokenId = _startingTokenId;
     }
 
     function claimAirdrop() external {
@@ -50,37 +71,48 @@ contract BoredDavid is
         eligibleForAirdrop[msg.sender] = false;
         uint256 supply = totalSupply();
         require(!paused);
-        uint256 tokenId = supply + 1;
-        require(tokenId <= maxSupply);
+        require(supply + 1 <= maxSupply);
+
+        uint256 tokenId = startingTokenId + supply + 1;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, notRevealedUri);
-        emit AirdropClaimed(msg.sender, tokenId);
+        emit AirdropClaimed(msg.sender, tokenId, 0);
     }
 
-    //TODO: Add another variable to enable minting
-    function mint(uint256 _mintAmount) external payable {
+    function _mintToken(uint256 _mintAmount, uint8 rarity) internal {
         uint256 supply = totalSupply();
         require(!paused, "Contract must be unpaused");
         require(_mintAmount > 0, "Mint amount must be more than 0");
         require(msg.sender == owner() || _mintAmount <= maxMintAmount, "Mint amount must be less than or equal to maxMintAmount");
         require(supply + _mintAmount <= maxSupply, "Mint amount must be less than or equal to maxSupply");
 
-        if (msg.sender != owner()) {
-            require(
-                msg.value >= cost * _mintAmount,
-                "Need appropriate amount of eth"
-            );
-        }
+        uint256 newTokenId = startingTokenId + supply;
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
-            _safeMint(msg.sender, supply + i);
-            _setTokenURI(supply + i, notRevealedUri);
+            _safeMint(msg.sender, newTokenId + i);
+            _setTokenURI(newTokenId + i, notRevealedUri);
             if (msg.sender != owner()) {
-                emit UserMint(msg.sender, supply + i);
+                emit UserMint(msg.sender, newTokenId + i, rarity);
             } else {
-                emit OwnerMint(msg.sender, supply + i);
+                emit OwnerMint(msg.sender, newTokenId + i, rarity);
             }
         }
+    }
+
+    function mintCommon(uint256 _mintAmount) external payable {
+        require(commonSaleEnabled, "Sale not enabled yet");
+        if (msg.sender != owner()) {
+            require(msg.value >= commonCost * _mintAmount, "Need appropriate amount of eth");
+        }
+        _mintToken(_mintAmount, 0);
+    }
+
+    function mintRare(uint256 _mintAmount) external payable {
+        require(rareSaleEnabled, "Sale not enabled yet");
+        if (msg.sender != owner()) {
+            require(msg.value >= rareCost * _mintAmount, "Need appropriate amount of eth");
+        }
+        _mintToken(_mintAmount, 1);
     }
 
     function walletOfOwner(address _owner)
@@ -174,8 +206,12 @@ contract BoredDavid is
         }
     }
 
-    function setCost(uint256 _newCost) external onlyOwner {
-        cost = _newCost;
+    function setRareCost(uint256 _newCost) external onlyOwner {
+        rareCost = _newCost;
+    }
+
+    function setCommonCost(uint256 _newCost) external onlyOwner {
+        commonCost = _newCost;
     }
 
     function setmaxMintAmount(uint256 _newmaxMintAmount) external onlyOwner {
@@ -188,6 +224,14 @@ contract BoredDavid is
 
     function pause(bool _state) external onlyOwner {
         paused = _state;
+    }
+
+    function enableCommonSale(bool _state) external onlyOwner {
+        commonSaleEnabled = _state;
+    }
+
+    function enableRareSale(bool _state) external onlyOwner {
+        rareSaleEnabled = _state;
     }
 
     function withdraw() external onlyOwner {

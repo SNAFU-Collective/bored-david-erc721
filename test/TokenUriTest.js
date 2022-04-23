@@ -7,19 +7,20 @@ contract("Token URI test", (accounts) => {
   let boredDavidInstance = null;
   before(async () => {
     boredDavidInstance = await BoredDavid.deployed();
+    await boredDavidInstance.enableCommonSale(true);
   });
 
   it("Should return uri of specific token", async () => {
-    await boredDavidInstance.mint(1, {
+    await boredDavidInstance.mintCommon(1, {
       from: user1,
       value: 5,
     });
-    const tokenURI = await boredDavidInstance.tokenURI(1);
+    const tokenURI = await boredDavidInstance.tokenURI(2);
     assert.equal(tokenURI, "https://example.com");
   });
 
   it("Invalid number of parameters for \"tokenURI\"", async () => {
-    await boredDavidInstance.mint(1, {
+    await boredDavidInstance.mintCommon(1, {
       from: user1,
       value: 5,
     });
