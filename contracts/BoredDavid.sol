@@ -17,17 +17,17 @@ contract BoredDavid is
     event AirdropClaimed(
         address indexed user,
         uint256 indexed tokenId,
-        uint256 rarity
+        uint8 rarity
     );
     event OwnerMint(
         address indexed user,
         uint256 indexed tokenId,
-        uint256 rarity
+        uint8 rarity
     );
     event UserMint(
         address indexed user,
         uint256 indexed tokenId,
-        uint256 rarity
+        uint8 rarity
     );
 
     using Strings for uint256;
