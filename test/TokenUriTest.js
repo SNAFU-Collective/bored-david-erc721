@@ -16,7 +16,7 @@ contract("Token URI test", (accounts) => {
       value: 5,
     });
     const tokenURI = await boredDavidInstance.tokenURI(2);
-    assert.equal(tokenURI, "https://example.com");
+    assert.equal(tokenURI, "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh");
   });
 
   it("Invalid number of parameters for \"tokenURI\"", async () => {
