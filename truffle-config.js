@@ -1,8 +1,8 @@
 require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const mnemonic = process.env.MNEMONIC;
-const INFURA_KEY = process.env.INFURA_URL + process.env.INFURA_KEY;
+const MNEMONIC = process.env.MNEMONIC;
+const INFURA_KEY = process.env.INFURA_KEY;
 
 module.exports = {
   networks: {
@@ -10,11 +10,21 @@ module.exports = {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
+      skipDryRun: true
+    },
+    rinkeby: {
+      provider: function() {
+        return new HDWalletProvider(
+          MNEMONIC,
+          "https://rinkeby.infura.io/v3/" + INFURA_KEY
+        );
+      },
+      network_id: "4"
     },
     xdai: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC,
+          MNEMONIC,
           "https://rpc.gnosischain.com"
         );
       },
@@ -26,7 +36,7 @@ module.exports = {
     polygon: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC,
+          MNEMONIC,
           "https://polygon-rpc.com/"
         );
       },
@@ -36,7 +46,7 @@ module.exports = {
     avalanche: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC,
+          MNEMONIC,
           "https://api.avax.network/ext/bc/C/rpc/"
         );
       },
@@ -46,7 +56,7 @@ module.exports = {
     bsc: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC,
+          MNEMONIC,
           "https://bsc-dataseed.binance.org/"
         );
       },
@@ -56,7 +66,7 @@ module.exports = {
     fantom: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC,
+          MNEMONIC,
           "https://rpc.ftm.tools/"
         );
       },
