@@ -1,16 +1,33 @@
-require("dotenv").config();
-const BoredDavid = artifacts.require("BoredDavid.sol");
+const chainParameters = {
+  "rinkeby": {
+      name: "Bored Test",
+      symbol: "BTEST",
+      not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
+      rare_cost: 5,
+      common_cost: 1,
+      max_supply: 100,
+      max_mint_amount: 20,
+      starting_token_id: 1
+  }
 
-module.exports = function (deployer) {
+}
+
+const BoredDavid = artifacts.require("BoredDavid.sol");
+module.exports = function (deployer, network) {
+  let parameters = chainParameters[network];
+  if(!parameters) {
+    console.error("Parameters for network %s not found", network);
+    return;
+  }
   deployer.deploy(
     BoredDavid,
-    process.env.NAME,
-    process.env.SYMBOL,
-    process.env.NOT_REVEAL_URL,
-    process.env.RARE_COST,
-    process.env.COMMON_COST,
-    process.env.MAX_SUPPLY,
-    process.env.MAX_MINT_AMOUNT,
-    process.env.STARTING_TOKEN_ID
+    parameters.name,
+    parameters.symbol,
+    parameters.not_reveal_url,
+    parameters.rare_cost,
+    parameters.common_cost,
+    parameters.max_supply,
+    parameters.max_mint_amount,
+    parameters.starting_token_id
   );
 };
