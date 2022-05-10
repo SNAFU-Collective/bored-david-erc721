@@ -1,25 +1,39 @@
+const { ether } = require('@openzeppelin/test-helpers');
+
 const chainParameters = {
   "rinkeby": {
-      name: "Bored Test",
+      name: "Bored Test on Rinkeby",
       symbol: "BTEST",
       not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-      rare_cost: 5,
-      common_cost: 1,
-      max_supply: 100,
+      rare_cost: ether('0.005'),
+      common_cost: ether('0.001'),
+      max_supply: 1000,
       max_mint_amount: 20,
       starting_token_id: 1
   },
-  "development": {
-      name: "Bored Test",
-      symbol: "BTEST",
-      not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-      rare_cost: 1,
-      common_cost: 1,
-      max_supply: 1000,
-      max_mint_amount: 5,
-      starting_token_id: 1
-  }
+  "goerli": {
+    name: "Bored Test on Goerli",
+    symbol: "BTEST",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
+    rare_cost: ether('0.004'),
+    common_cost: ether('0.0001'),
+    max_supply: 1000,
+    max_mint_amount: 20,
+    starting_token_id: 1000
+  },
+  "ropsten": {
+    name: "Bored Test on Ropsten",
+    symbol: "BTEST",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
+    rare_cost: ether('0.0045'),
+    common_cost: ether('0.0002'),
+    max_supply: 1000,
+    max_mint_amount: 20,
+    starting_token_id: 2000
+  },
+
 }
+//gnosis, ethereum, aurora, polygon, avalanche, bsc
 
 const BoredDavid = artifacts.require("BoredDavid.sol");
 module.exports = function (deployer, network) {

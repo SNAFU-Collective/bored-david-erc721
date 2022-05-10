@@ -21,6 +21,24 @@ module.exports = {
       },
       network_id: "4"
     },
+    ropsten: {
+      provider: function() {
+        return new HDWalletProvider(
+          MNEMONIC,
+          "https://ropsten.infura.io/v3/" + INFURA_KEY
+        );
+      },
+      network_id: "3"
+    },
+    goerli: {
+      provider: function() {
+        return new HDWalletProvider(
+          MNEMONIC,
+          "https://goerli.infura.io/v3/" + INFURA_KEY
+        );
+      },
+      network_id: "5"
+    },
     xdai: {
       provider: function () {
         return new HDWalletProvider(
@@ -62,7 +80,7 @@ module.exports = {
       },
       network_id: 56,
     },
-
+    //TODO: add Aurora
     fantom: {
       provider: function () {
         return new HDWalletProvider(
