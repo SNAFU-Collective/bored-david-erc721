@@ -6,8 +6,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
-//TODO: add error messages
-//TODO: test the batch amount
 contract BoredDavid is
     ERC721Enumerable,
     ERC721URIStorage,
@@ -17,17 +15,17 @@ contract BoredDavid is
     event AirdropClaimed(
         address indexed user,
         uint256 indexed tokenId,
-        uint8 rarity
+        uint8 indexed rarity
     );
     event OwnerMint(
         address indexed user,
         uint256 indexed tokenId,
-        uint8 rarity
+        uint8 indexed rarity
     );
     event UserMint(
         address indexed user,
         uint256 indexed tokenId,
-        uint8 rarity
+        uint8 indexed rarity
     );
 
     using Strings for uint256;
