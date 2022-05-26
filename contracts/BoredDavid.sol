@@ -40,7 +40,6 @@ contract BoredDavid is
     bool public commonSaleEnabled;
     bool public rareSaleEnabled;
 
-
     mapping(address => bool) public eligibleForAirdrop;
 
     constructor(
@@ -85,8 +84,14 @@ contract BoredDavid is
         uint256 supply = totalSupply();
         require(!paused, "Contract must be unpaused");
         require(_mintAmount > 0, "Mint amount must be more than 0");
-        require(msg.sender == owner() || _mintAmount <= maxMintAmount, "Mint amount must be less than or equal to maxMintAmount");
-        require(supply + _mintAmount <= maxSupply, "Mint amount must be less than or equal to maxSupply");
+        require(
+            msg.sender == owner() || _mintAmount <= maxMintAmount,
+            "Mint amount must be less than or equal to maxMintAmount"
+        );
+        require(
+            supply + _mintAmount <= maxSupply,
+            "Mint amount must be less than or equal to maxSupply"
+        );
 
         uint256 newTokenId = startingTokenId + supply;
 
@@ -104,7 +109,10 @@ contract BoredDavid is
     function mintCommon(uint256 _mintAmount) external payable {
         require(commonSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
-            require(msg.value >= commonCost * _mintAmount, "Need appropriate amount of eth");
+            require(
+                msg.value >= commonCost * _mintAmount,
+                "Need appropriate amount of eth"
+            );
         }
         _mintToken(_mintAmount, 0);
     }
@@ -112,7 +120,10 @@ contract BoredDavid is
     function mintRare(uint256 _mintAmount) external payable {
         require(rareSaleEnabled, "Sale not enabled yet");
         if (msg.sender != owner()) {
-            require(msg.value >= rareCost * _mintAmount, "Need appropriate amount of eth");
+            require(
+                msg.value >= rareCost * _mintAmount,
+                "Need appropriate amount of eth"
+            );
         }
         _mintToken(_mintAmount, 1);
     }
@@ -186,8 +197,6 @@ contract BoredDavid is
 
     // Parameters: 2 arrays, one for token ids and one for token uris. You can update it more than once.
 
-    // We could do a mapping (unveiled -> true/false). If unveiled === true then you cannot update the tokenUri.
-
     function unveilNFTs(uint256[] memory tokenIds, string[] memory uris)
         external
         onlyOwner
@@ -199,10 +208,7 @@ contract BoredDavid is
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 tokenId = tokenIds[i];
             string memory uri = uris[i];
-            if (
-                keccak256(abi.encodePacked(tokenURI(tokenId))) ==
-                keccak256(abi.encodePacked(notRevealedUri))
-            ) {
+            if (bytes(_tokenURIs[tokenId]).length == 0) {
                 _setTokenURI(tokenId, uri);
             }
         }
