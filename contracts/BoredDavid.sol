@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "./ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
 contract BoredDavid is
@@ -34,12 +34,12 @@ contract BoredDavid is
     uint256 public commonCost;
     uint256 public maxSupply;
     uint256 public maxMintAmount;
-    bool public paused = false;
-    string public notRevealedUri;
     uint256 public startingTokenId;
 
+    bool public paused;
     bool public commonSaleEnabled;
     bool public rareSaleEnabled;
+
 
     mapping(address => bool) public eligibleForAirdrop;
 
@@ -77,7 +77,7 @@ contract BoredDavid is
 
         uint256 tokenId = startingTokenId + supply + 1;
         _safeMint(msg.sender, tokenId);
-        _setTokenURI(tokenId, notRevealedUri);
+        //_setTokenURI(tokenId, notRevealedUri);
         emit AirdropClaimed(msg.sender, tokenId, 0);
     }
 
@@ -92,7 +92,7 @@ contract BoredDavid is
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _safeMint(msg.sender, newTokenId + i);
-            _setTokenURI(newTokenId + i, notRevealedUri);
+            //_setTokenURI(newTokenId + i, notRevealedUri);
             if (msg.sender != owner()) {
                 emit UserMint(msg.sender, newTokenId + i, rarity);
             } else {
