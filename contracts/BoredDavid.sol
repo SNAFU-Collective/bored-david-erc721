@@ -51,7 +51,9 @@ contract BoredDavid is
         uint256 _commonCost,
         uint256 _maxSupply,
         uint256 _maxMintAmount,
-        uint256 _startingTokenId
+        uint256 _startingTokenId,
+        bool _commonSaleEnabled,
+        bool _rareSaleEnabled
     ) ERC721(_name, _symbol) {
         setNotRevealedURI(_initNotRevealedUri);
         rareCost = _rareCost;
@@ -59,6 +61,8 @@ contract BoredDavid is
         maxSupply = _maxSupply;
         maxMintAmount = _maxMintAmount;
         startingTokenId = _startingTokenId;
+        commonSaleEnabled = _commonSaleEnabled;
+        rareSaleEnabled = _rareSaleEnabled;
     }
 
     function claimAirdrop() external {

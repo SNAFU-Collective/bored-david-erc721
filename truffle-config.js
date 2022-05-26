@@ -13,7 +13,7 @@ module.exports = {
       skipDryRun: true
     },
     rinkeby: {
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
           "https://rinkeby.infura.io/v3/" + INFURA_KEY
@@ -22,7 +22,7 @@ module.exports = {
       network_id: "4"
     },
     ropsten: {
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
           "https://ropsten.infura.io/v3/" + INFURA_KEY
@@ -31,7 +31,7 @@ module.exports = {
       network_id: "3"
     },
     goerli: {
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
           "https://goerli.infura.io/v3/" + INFURA_KEY
@@ -94,12 +94,19 @@ module.exports = {
 
   mocha: {
     // timeout: 100000
+    reporter: 'eth-gas-reporter',
   },
 
   // Configure your compilers
   compilers: {
     solc: {
       version: "0.8.11",
+      settings: {          
+        optimizer: {
+          enabled: true,
+          runs: 1500
+        },
+      }
     },
   },
   plugins: ["truffle-plugin-verify"],

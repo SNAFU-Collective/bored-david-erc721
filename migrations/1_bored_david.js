@@ -9,8 +9,22 @@ const chainParameters = {
       common_cost: ether('0.001'),
       max_supply: 1000,
       max_mint_amount: 20,
-      starting_token_id: 1
+      starting_token_id: 0,
+      common_sale_enabled: true,
+      rare_sale_enabled: true
   },
+  "development": {
+    name: "Bored Test on DEV",
+    symbol: "BTEST",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
+    rare_cost: 1,
+    common_cost: 1,
+    max_supply: 1000,
+    max_mint_amount: 5,
+    starting_token_id: 0,
+    common_sale_enabled: true,
+    rare_sale_enabled: true
+},
   "goerli": {
     name: "Bored Test on Goerli",
     symbol: "BTEST",
@@ -19,7 +33,9 @@ const chainParameters = {
     common_cost: ether('0.0001'),
     max_supply: 1000,
     max_mint_amount: 20,
-    starting_token_id: 1000
+    starting_token_id: 1000,
+    common_sale_enabled: true,
+    rare_sale_enabled: true
   },
   "ropsten": {
     name: "Bored Test on Ropsten",
@@ -29,7 +45,9 @@ const chainParameters = {
     common_cost: ether('0.0002'),
     max_supply: 1000,
     max_mint_amount: 20,
-    starting_token_id: 2000
+    starting_token_id: 2000,
+    common_sale_enabled: true,
+    rare_sale_enabled: true
   },
 
 }
@@ -51,6 +69,8 @@ module.exports = function (deployer, network) {
     parameters.common_cost,
     parameters.max_supply,
     parameters.max_mint_amount,
-    parameters.starting_token_id
+    parameters.starting_token_id,
+    parameters.common_sale_enabled,
+    parameters.rare_sale_enabled
   );
 };

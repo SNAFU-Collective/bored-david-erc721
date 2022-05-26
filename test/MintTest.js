@@ -48,7 +48,6 @@ contract("Mint NFTs", (accounts) => {
           from: user1,
           value: 5,
         })
-
         assert.equal(response.logs[0].event, "Transfer");
         assert.equal(response.logs[1].event, "UserMint");
     });

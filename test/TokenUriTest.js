@@ -15,7 +15,7 @@ contract("Token URI test", (accounts) => {
       from: user1,
       value: 5,
     });
-    const tokenURI = await boredDavidInstance.tokenURI(2);
+    const tokenURI = await boredDavidInstance.tokenURI(1);
     assert.equal(tokenURI, "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh");
   });
 

@@ -34,14 +34,14 @@ contract("Unveil NFT", (accounts) => {
       });
 
     await boredDavidInstance.unveilNFTs(
-      [2, 3],
+      [1, 2],
       ["http://updateuri.com", "http://updateuri2.com"],
       {
         from: owner,
       }
     );
 
-    const tokenURI = await boredDavidInstance.tokenURI(2);
+    const tokenURI = await boredDavidInstance.tokenURI(1);
     assert.equal(tokenURI, "http://updateuri.com");
 
   });
