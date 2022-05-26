@@ -93,7 +93,6 @@ module.exports = {
   },
 
   mocha: {
-    // timeout: 100000
     reporter: 'eth-gas-reporter',
   },
 
