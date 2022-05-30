@@ -21,7 +21,7 @@ const chainParameters = {
     common_cost: ether('50'),
     max_supply: 2000,
     max_mint_amount: 10,
-    starting_token_id: 2167,
+    starting_token_id: 2166,
     common_sale_enabled: true,
     rare_sale_enabled: true
 },
@@ -33,7 +33,7 @@ const chainParameters = {
     common_cost: ether('0.16'),
     max_supply: 1000,
     max_mint_amount: 10,
-    starting_token_id: 4168,
+    starting_token_id: 4166,
     common_sale_enabled: true,
     rare_sale_enabled: true
   },
@@ -45,7 +45,7 @@ const chainParameters = {
     common_cost: ether('2'),
     max_supply: 500,
     max_mint_amount: 10,
-    starting_token_id: 5169,
+    starting_token_id: 5166,
     common_sale_enabled: true,
     rare_sale_enabled: true
   },
@@ -57,7 +57,7 @@ const chainParameters = {
     common_cost: ether('80'),
     max_supply: 500,
     max_mint_amount: 10,
-    starting_token_id: 5670,
+    starting_token_id: 5666,
     common_sale_enabled: true,
     rare_sale_enabled: true
   },
@@ -69,7 +69,7 @@ const chainParameters = {
     common_cost: ether('15'),
     max_supply: 500,
     max_mint_amount: 10,
-    starting_token_id: 6171,//non mi tornano i numeri
+    starting_token_id: 6166,
     common_sale_enabled: true,
     rare_sale_enabled: true
   },

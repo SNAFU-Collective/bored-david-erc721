@@ -1,7 +1,7 @@
 require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const MNEMONIC = process.env.MNEMONIC;
+const MNEMONIC = process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : process.env.MNEMONIC;
 const INFURA_KEY = process.env.INFURA_KEY;
 
 module.exports = {
@@ -80,15 +80,14 @@ module.exports = {
       },
       network_id: 56,
     },
-    //TODO: add Aurora
-    fantom: {
+    aurora: {
       provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
-          "https://rpc.ftm.tools/"
+          "https://mainnet.aurora.dev"
         );
       },
-      network_id: 250,
+      network_id: 1313161554,
     },
   },
 
