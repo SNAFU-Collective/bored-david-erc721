@@ -1,51 +1,75 @@
 const { ether } = require('@openzeppelin/test-helpers');
 
 const chainParameters = {
-  "rinkeby": {
-      name: "Bored Test on Rinkeby",
-      symbol: "BTEST",
-      not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-      rare_cost: ether('0.005'),
-      common_cost: ether('0.001'),
-      max_supply: 1000,
-      max_mint_amount: 20,
-      starting_token_id: 0,
+  "ethereum": {
+      name: "Bored David",
+      symbol: "DAVID",//non sono sicuro del symbol
+      not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+      rare_cost: ether('0.15'),
+      common_cost: ether('0.03'),
+      max_supply: 2166,
+      max_mint_amount: 10,
+      starting_token_id: 0,//chiedere a franz se il primo nft avrà id 1 o 0
       common_sale_enabled: true,
       rare_sale_enabled: true
   },
-  "development": {
-    name: "Bored Test on DEV",
-    symbol: "BTEST",
-    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-    rare_cost: 1,
-    common_cost: 1,
-    max_supply: 1000,
-    max_mint_amount: 5,
-    starting_token_id: 0,
+  "gnosis": {
+    name: "Bored David on Gnosis",
+    symbol: "DAVID",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+    rare_cost: ether('300'),
+    common_cost: ether('50'),
+    max_supply: 2000,
+    max_mint_amount: 10,
+    starting_token_id: 2167,
     common_sale_enabled: true,
     rare_sale_enabled: true
 },
-  "goerli": {
-    name: "Bored Test on Goerli",
-    symbol: "BTEST",
-    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-    rare_cost: ether('0.004'),
-    common_cost: ether('0.0001'),
+  "bsc": {
+    name: "Bored David on BSC",
+    symbol: "DAVID",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+    rare_cost: ether('1'),
+    common_cost: ether('0.16'),
     max_supply: 1000,
-    max_mint_amount: 20,
-    starting_token_id: 1000,
+    max_mint_amount: 10,
+    starting_token_id: 4168,
     common_sale_enabled: true,
     rare_sale_enabled: true
   },
-  "ropsten": {
-    name: "Bored Test on Ropsten",
-    symbol: "BTEST",
-    not_reveal_url: "https://ipfs.infura.io/ipfs/QmQ4FxmmKyHA8Mzpqfvy8Hgjbu2gCUgS84J7R6xDXobqUh",
-    rare_cost: ether('0.0045'),
-    common_cost: ether('0.0002'),
-    max_supply: 1000,
-    max_mint_amount: 20,
-    starting_token_id: 2000,
+  "avalanche": {
+    name: "Bored David on Avalanche",
+    symbol: "DAVID",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+    rare_cost: ether('11'),
+    common_cost: ether('2'),
+    max_supply: 500,
+    max_mint_amount: 10,
+    starting_token_id: 5169,
+    common_sale_enabled: true,
+    rare_sale_enabled: true
+  },
+  "polygon": {
+    name: "Bored David on Polygon",
+    symbol: "DAVID",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+    rare_cost: ether('480'),
+    common_cost: ether('80'),
+    max_supply: 500,
+    max_mint_amount: 10,
+    starting_token_id: 5670,
+    common_sale_enabled: true,
+    rare_sale_enabled: true
+  },
+  "aurora": {
+    name: "Bored David on Aurora",
+    symbol: "DAVID",
+    not_reveal_url: "https://ipfs.infura.io/ipfs/QmcZy2F9jbZVitUXGxapLojKi8NdirBNEDjjfi7UZQ8nTn",
+    rare_cost: ether('100'),
+    common_cost: ether('15'),
+    max_supply: 500,
+    max_mint_amount: 10,
+    starting_token_id: 6171,//non mi tornano i numeri
     common_sale_enabled: true,
     rare_sale_enabled: true
   },
