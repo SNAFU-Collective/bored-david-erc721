@@ -16,5 +16,5 @@ OLD - with current gaslimit on ropsten is not usable
 - Ethereum:  https://etherscan.io/address/0x8B8AF1072e8cf40CF75ad6EFDf9Fe999a47E285C#code
 - Binance: https://bscscan.com/address/0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c
 - Avalanche: https://snowtrace.io/address/0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c
-- Aurora: https://aurorascan.dev/address/0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c DA VERIFICARE
-- Gnosis https://blockscout.com/xdai/mainnet/address/0x8B8AF1072e8cf40CF75ad6EFDf9Fe999a47E285C DA VERIFICARE
+- Aurora: https://aurorascan.dev/address/0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c
+- Gnosis https://blockscout.com/xdai/mainnet/address/0x8B8AF1072e8cf40CF75ad6EFDf9Fe999a47E285C

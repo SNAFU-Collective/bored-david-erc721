@@ -102,7 +102,7 @@ module.exports = {
           "https://mainnet.aurora.dev"
         );
       },
-      network_id: "1313161554",
+      network_id: 1313161554,
       gasPrice: 1000000000,
       gas: 4156674
     },
