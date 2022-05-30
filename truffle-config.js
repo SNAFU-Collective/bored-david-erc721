@@ -1,7 +1,7 @@
 require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const MNEMONIC = process.env.MNEMONIC;
+const MNEMONIC = process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : process.env.MNEMONIC;
 const INFURA_KEY = process.env.INFURA_KEY;
 
 module.exports = {
@@ -30,6 +30,17 @@ module.exports = {
       },
       network_id: "3"
     },
+    ethereum: {
+      provider: function () {
+        return new HDWalletProvider(
+          MNEMONIC,
+          "https://mainnet.infura.io/v3/" + INFURA_KEY
+        );
+      },
+      network_id: "1",
+      gasPrice: 30000000000
+
+    },
     goerli: {
       provider: function () {
         return new HDWalletProvider(
@@ -39,7 +50,7 @@ module.exports = {
       },
       network_id: "5"
     },
-    xdai: {
+    gnosis: {
       provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
@@ -47,6 +58,7 @@ module.exports = {
         );
       },
       network_id: 100,
+      gasPrice: 1500000000 
       // gas: 500000,
       // gasPrice: 1000000000,
     },
@@ -55,20 +67,22 @@ module.exports = {
       provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
-          "https://polygon-rpc.com/"
+          "https://polygon-mainnet.g.alchemy.com/v2/"
         );
       },
       network_id: 137,
+      gasPrice: 50000000000
     },
 
     avalanche: {
       provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
-          "https://api.avax.network/ext/bc/C/rpc/"
+          "https://rpc.ankr.com/avalanche"
         );
       },
       network_id: 43114,
+      gasPrice: 27000000000
     },
 
     bsc: {
@@ -79,16 +93,18 @@ module.exports = {
         );
       },
       network_id: 56,
+      gasPrice: 5000000000
     },
-    //TODO: add Aurora
-    fantom: {
+    aurora: {
       provider: function () {
         return new HDWalletProvider(
           MNEMONIC,
-          "https://rpc.ftm.tools/"
+          "https://mainnet.aurora.dev"
         );
       },
-      network_id: 250,
+      network_id: 1313161554,
+      gasPrice: 1000000000,
+      gas: 4156674
     },
   },
 
@@ -112,5 +128,10 @@ module.exports = {
 
   api_keys: {
     etherscan: process.env.ETHERSCAN_KEY,
+    polygonscan: process.env.POLYGON_KEY,
+    bscscan: process.env.BSC_KEY,
+    snowtrace: process.env.SNOWTRACE,
+    aurorascan: process.env.AURORA_KEY,
+
   },
 };

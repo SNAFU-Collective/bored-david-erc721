@@ -8,6 +8,7 @@
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.15",
     "eth-gas-reporter": "^0.2.25",
-    "truffle-plugin-verify": "^0.5.21"
+    "sol-merger": "^4.1.1",
+    "truffle-plugin-verify": "^0.5.26"
   }
 }
