@@ -9,7 +9,7 @@ const chainParameters = {
       common_cost: ether('0.03'),
       max_supply: 2166,
       max_mint_amount: 10,
-      starting_token_id: 0,//chiedere a franz se il primo nft avrà id 1 o 0
+      starting_token_id: 0,
       common_sale_enabled: true,
       rare_sale_enabled: true
   },
